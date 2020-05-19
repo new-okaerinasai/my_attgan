@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Обучил ГАН проверяй</title>
+</head>
+<body>
+<h1>Обучил ГАН проверяй</h1>
+<h2>Что эта штука делает?</h2>
+Кажется, и так понятно.
+<h2>А как заставить работать?</h2>
+Просто загрузите фоточку и скажите, что с ней делать. Пожалуйста, загружайте (как можно более) квадратные фото.
+Всё равно будет решейп в 384x384. Да, маленькие картинки, но у меня нет достаточно ГПУ для обучения.
+<h2>В каком режиме работает?</h2>
+На CPU. Оказывается, в гугл-клауде бесплатная квота не позволяет использовать <br>
+GPU или TPU. Деплоить приложение у себя на локальном компе я не считаю безопасным вариантом...
+<h2>TODO</h2>
+В целом, изначально я хотел воспользоваться TFLite для конвертации модели для мобильных устройств и сделать <br>
+в качестве демки андроид-приложение. Но это оказалось слишком трудоёмко. Могу конвертировать недообученный ГАН.
+<h2>Пробуйте!</h2>
+
+<form method=post enctype=multipart/form-data>
+    <input type=file name=file>
+    <input type=submit value="Загрузить фоточку"><br>
+    <script>
+        function onlyOne(checkbox) {
+            var checkboxes = document.getElementsByName('check')
+            checkboxes.forEach((item) => {
+                if (item !== checkbox) item.checked = false
+            })
+        }
+    </script>
+    <label>
+        <input type="checkbox" name="Bald" value="edit" onclick="onlyOne(this)"> Стать лысым <br>
+        <input type="checkbox" name="Bangs" value="edit" onclick="onlyOne(this)"> Стать с чёлкой <br>
+        <input type="checkbox" name="Black_hair" value="edit" onclick="onlyOne(this)"> Перекраситься в брюнетку <br>
+        <input type="checkbox" name="Blond_hair" value="edit" onclick="onlyOne(this)"> Перекраситься в блондинку <br>
+        <input type="checkbox" name="Eyeglasses" value="edit" onclick="onlyOne(this)"> Стать очкариком <br>
+    </label>
+</form>
+
+{% if b64_result %}
+    <img src="" id="img" alt="Chart" height="100" width="100">
+    <script>
+        data = "{{b64_result}}"
+        data = data.replace("b&#39;", "")
+        data = data.replace("&#39;", "")
+        document.getElementById("img").src = "data:image/png;base64,"+data;
+    </script>
+{% endif %}
+</body>
+</html>
